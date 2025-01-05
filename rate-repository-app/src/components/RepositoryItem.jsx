@@ -1,6 +1,14 @@
 import { View, StyleSheet, Image } from 'react-native';
 import Text from './Text';
 
+const formatCount = (count) => {
+  if (count >= 1000) {
+    return `${(count / 1000).toFixed(1)}k`;
+  }
+  return count.toString();
+};
+
+
 const RepositoryItem = ({
   fullName,
   description,
@@ -25,8 +33,8 @@ const RepositoryItem = ({
           <Text style={styles.language}>{language}</Text>
         </View>
         <View style={styles.statsContainer}>
-          <StatItem label="Stars" value={stargazersCount} />
-          <StatItem label="Forks" value={forksCount} />
+          <StatItem label="Stars" value={formatCount(stargazersCount)} />
+          <StatItem label="Forks" value={formatCount(forksCount)} />
           <StatItem label="Reviews" value={reviewCount} />
           <StatItem label="Rating" value={ratingAverage} />
         </View>
@@ -89,7 +97,7 @@ const styles = StyleSheet.create({
   statsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 10,
+    paddingHorizontal: 1,
   },
   statItem: {
     alignItems: 'center',
