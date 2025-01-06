@@ -1,7 +1,12 @@
-import React from 'react';
 import { Text, TextInput, Pressable, View, StyleSheet } from 'react-native';
 import { useFormik } from 'formik';
+import * as yup from 'yup';
 import theme from '../theme';
+
+const validationSchema = yup.object().shape({
+  username: yup.string().required('Username is required'),
+  password: yup.string().required('Password is required'),
+});
 
 const initialValues = {
   username: '',
@@ -11,6 +16,7 @@ const initialValues = {
 const SignIn = () => {
   const formik = useFormik({
     initialValues,
+    validationSchema,
     onSubmit: (values) => {
       console.log('Form values:', values);
     },
@@ -19,21 +25,36 @@ const SignIn = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Sign In</Text>
+
       <TextInput
-        style={styles.input}
+        style={[
+          styles.input,
+          formik.touched.username && formik.errors.username && styles.errorInput,
+        ]}
         placeholder="Username"
         value={formik.values.username}
         onChangeText={formik.handleChange('username')}
         onBlur={formik.handleBlur('username')}
       />
+      {formik.touched.username && formik.errors.username && (
+        <Text style={styles.errorText}>{formik.errors.username}</Text>
+      )}
+
       <TextInput
-        style={styles.input}
+        style={[
+          styles.input,
+          formik.touched.password && formik.errors.password && styles.errorInput,
+        ]}
         placeholder="Password"
         secureTextEntry
         value={formik.values.password}
         onChangeText={formik.handleChange('password')}
         onBlur={formik.handleBlur('password')}
       />
+      {formik.touched.password && formik.errors.password && (
+        <Text style={styles.errorText}>{formik.errors.password}</Text>
+      )}
+
       <Pressable style={styles.button} onPress={formik.handleSubmit}>
         <Text style={styles.buttonText}>Sign In</Text>
       </Pressable>
@@ -61,6 +82,14 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     paddingHorizontal: 8,
     fontSize: theme.fontSizes.body,
+  },
+  errorInput: {
+    borderColor: 'red',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: theme.fontSizes.body,
+    marginBottom: 8,
   },
   button: {
     backgroundColor: theme.colors.primary,
