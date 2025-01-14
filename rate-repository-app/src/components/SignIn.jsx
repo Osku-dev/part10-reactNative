@@ -1,5 +1,7 @@
 import { Text, TextInput, Pressable, View, StyleSheet } from 'react-native';
 import { useFormik } from 'formik';
+import useSignIn from '../hooks/useSignIn';
+import { useNavigate } from 'react-router-native'
 import * as yup from 'yup';
 import theme from '../theme';
 
@@ -14,11 +16,20 @@ const initialValues = {
 };
 
 const SignIn = () => {
+  const [signIn] = useSignIn();
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: (values) => {
-      console.log('Form values:', values);
+    onSubmit: async (values) => {
+      try {
+        const accessToken = await signIn(values);
+        console.log('Access Token:', accessToken);
+        navigate('/');
+      } catch (error) {
+        console.error('Sign-in failed:', error.message);
+      }
     },
   });
 
