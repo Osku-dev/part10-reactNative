@@ -24,8 +24,7 @@ const SignIn = () => {
     validationSchema,
     onSubmit: async (values) => {
       try {
-        const accessToken = await signIn(values);
-        console.log('Access Token:', accessToken);
+        await signIn(values);
         navigate('/');
       } catch (error) {
         console.error('Sign-in failed:', error.message);
