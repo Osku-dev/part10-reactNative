@@ -3,6 +3,9 @@ import { Link } from "react-router-native";
 import Constants from "expo-constants";
 import theme from "../theme";
 import Text from "./Text";
+import { useQuery } from '@apollo/client';
+import { GET_CURRENT_USER } from '../graphql/queries';
+import useSignOut from '../hooks/useSignOut';
 
 const styles = StyleSheet.create({
   container: {
@@ -20,6 +23,15 @@ const styles = StyleSheet.create({
 });
 
 const AppBar = () => {
+
+  const { data, loading, error } = useQuery(GET_CURRENT_USER);
+  const signOut = useSignOut();
+
+  if (loading) return null;
+  if (error) console.error('Error fetching user:', error);
+
+  const isLoggedIn = data?.me !== null;
+
   return (
     <View style={styles.container}>
       <ScrollView horizontal>
@@ -28,14 +40,31 @@ const AppBar = () => {
             Repositories
           </Text>
         </Link>
-        <Link to="/signIn" style={styles.link}>
-          <Text color="appBarText" fontSize="subheading">
-            Sign in
+        {isLoggedIn ? (
+          <Text
+            color="appBarText"
+            fontSize="subheading"
+            onPress={async () => {
+              try {
+                await signOut();
+              } catch (error) {
+                console.error('Failed to sign out:', error);
+              }
+            }}
+            style={styles.link}
+          >
+            Sign out
           </Text>
-        </Link>
+        ) : (
+          <Link to="/signIn" style={styles.link}>
+            <Text color="appBarText" fontSize="subheading">
+              Sign in
+            </Text>
+          </Link>
+        )}
       </ScrollView>
     </View>
   );
-};
+};  
 
 export default AppBar;
