@@ -8,8 +8,8 @@ const formatCount = (count) => {
   return count.toString();
 };
 
-
 const RepositoryItem = ({
+  id,
   fullName,
   description,
   language,
@@ -20,32 +20,34 @@ const RepositoryItem = ({
   ownerAvatarUrl,
 }) => {
   return (
-    <View style={styles.container}>
-      <Image source={{ uri: ownerAvatarUrl }} style={styles.avatar} />
+    <View testID={`repositoryItem-${id}`} style={styles.container}>
+      <Image source={{ uri: ownerAvatarUrl }} style={styles.avatar} testID={`avatar-${id}`} />
       <View style={styles.details}>
-        <Text fontWeight="bold" fontSize="subheading" style={styles.fullName}>
+        <Text fontWeight="bold" fontSize="subheading" style={styles.fullName} testID={`fullName-${id}`}>
           {fullName}
         </Text>
-        <Text color="textSecondary" style={styles.description}>
+        <Text color="textSecondary" style={styles.description} testID={`description-${id}`}>
           {description}
         </Text>
         <View style={styles.languageContainer}>
-          <Text style={styles.language}>{language}</Text>
+          <Text style={styles.language} testID={`language-${id}`}>
+            {language}
+          </Text>
         </View>
         <View style={styles.statsContainer}>
-          <StatItem label="Stars" value={formatCount(stargazersCount)} />
-          <StatItem label="Forks" value={formatCount(forksCount)} />
-          <StatItem label="Reviews" value={reviewCount} />
-          <StatItem label="Rating" value={ratingAverage} />
+          <StatItem label="Stars" value={formatCount(stargazersCount)} testID={`stars-${id}`} />
+          <StatItem label="Forks" value={formatCount(forksCount)} testID={`forks-${id}`} />
+          <StatItem label="Reviews" value={reviewCount} testID={`reviews-${id}`} />
+          <StatItem label="Rating" value={ratingAverage} testID={`rating-${id}`} />
         </View>
       </View>
     </View>
   );
 };
 
-const StatItem = ({ label, value }) => (
+const StatItem = ({ label, value, testID }) => (
   <View style={styles.statItem}>
-    <Text fontWeight="bold" style={styles.statValue}>
+    <Text fontWeight="bold" style={styles.statValue} testID={`${testID}`}>
       {value}
     </Text>
     <Text color="textSecondary" style={styles.statLabel}>
@@ -53,6 +55,7 @@ const StatItem = ({ label, value }) => (
     </Text>
   </View>
 );
+
 
 const styles = StyleSheet.create({
   container: {
@@ -92,7 +95,7 @@ const styles = StyleSheet.create({
   },
   language: {
     color: 'white',
-    fontSize: 12, 
+    fontSize: 12,
   },
   statsContainer: {
     flexDirection: 'row',
@@ -102,7 +105,6 @@ const styles = StyleSheet.create({
   statItem: {
     alignItems: 'center',
   },
-  
   statLabel: {
     fontSize: 12,
   },

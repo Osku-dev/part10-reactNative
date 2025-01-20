@@ -11,16 +11,11 @@ const styles = StyleSheet.create({
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-const RepositoryList = () => {
-  const { repositories, loading } = useRepositories();
-
+export const RepositoryListContainer = ({ repositories }) => {
   const repositoryNodes = repositories
     ? repositories.edges.map((edge) => edge.node)
     : [];
 
-    if (loading) {
-      return <Text>Loading...</Text>;
-    }
   return (
     <FlatList
       data={repositoryNodes}
@@ -28,6 +23,15 @@ const RepositoryList = () => {
       renderItem={({ item }) => <RepositoryItem {...item} />}
     />
   );
+};
+
+const RepositoryList = () => {
+  const { repositories, loading } = useRepositories();
+
+    if (loading) {
+      return <Text>Loading...</Text>;
+    }
+    return <RepositoryListContainer repositories={repositories} />;
 };
 
 export default RepositoryList;
