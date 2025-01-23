@@ -1,5 +1,6 @@
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image, Pressable } from 'react-native';
 import Text from './Text';
+import theme from '../theme';
 
 const formatCount = (count) => {
   if (count >= 1000) {
@@ -18,9 +19,12 @@ const RepositoryItem = ({
   ratingAverage,
   reviewCount,
   ownerAvatarUrl,
+  showGitHubButton, 
+  onGitHubPress
 }) => {
   return (
     <View testID={`repositoryItem-${id}`} style={styles.container}>
+      <View style={styles.headerContainer}>
       <Image source={{ uri: ownerAvatarUrl }} style={styles.avatar} testID={`avatar-${id}`} />
       <View style={styles.details}>
         <Text fontWeight="bold" fontSize="subheading" style={styles.fullName} testID={`fullName-${id}`}>
@@ -33,7 +37,8 @@ const RepositoryItem = ({
           <Text style={styles.language} testID={`language-${id}`}>
             {language}
           </Text>
-        </View>
+          </View>
+        
         <View style={styles.statsContainer}>
           <StatItem label="Stars" value={formatCount(stargazersCount)} testID={`stars-${id}`} />
           <StatItem label="Forks" value={formatCount(forksCount)} testID={`forks-${id}`} />
@@ -41,7 +46,18 @@ const RepositoryItem = ({
           <StatItem label="Rating" value={ratingAverage} testID={`rating-${id}`} />
         </View>
       </View>
+      </View>
+      
+      
+      {showGitHubButton && (
+        <View style={styles.buttonWrapper}>
+        <Pressable testID="gitHubButton" style={styles.button} onPress={onGitHubPress}>
+        <Text style={styles.buttonText}>Open in GitHub</Text>
+      </Pressable>
+      </View>
+      )}
     </View>
+    
   );
 };
 
@@ -59,7 +75,7 @@ const StatItem = ({ label, value, testID }) => (
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     padding: 10,
     backgroundColor: 'white',
     marginVertical: 5,
@@ -69,6 +85,10 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
     elevation: 3,
+  },
+  headerContainer: {
+    flexDirection: 'row', 
+    marginBottom: 10, 
   },
   avatar: {
     width: 50,
@@ -107,6 +127,22 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     fontSize: 12,
+  },
+  buttonWrapper: {
+    marginTop: 16,
+    alignItems: 'center', 
+  },
+  button: {
+    backgroundColor: theme.colors.primary,
+    padding: 12,
+    borderRadius: 4,
+    alignItems: 'center',
+    width: '100%',
+  },
+  buttonText: {
+    fontSize: theme.fontSizes.subheading,
+    fontWeight: theme.fontWeights.bold,
+    color: theme.colors.appBarText,
   },
 });
 
