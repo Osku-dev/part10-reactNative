@@ -36,14 +36,21 @@ const AppBar = () => {
     <View style={styles.container}>
       <ScrollView horizontal>
         <Link to="/" style={styles.link}>
-          <Text color="appBarText" fontSize="heading" fontWeight="bold">
+          <Text color="appBarText" fontSize="heading" >
             Repositories
           </Text>
         </Link>
         {isLoggedIn ? (
+          
+          <>
+          <Link to="/createReview" style={styles.link}>
+            <Text color="appBarText" fontSize="heading">
+              Create a review
+            </Text>
+          </Link>
           <Text
             color="appBarText"
-            fontSize="subheading"
+            fontSize="heading"
             onPress={async () => {
               try {
                 await signOut();
@@ -55,6 +62,7 @@ const AppBar = () => {
           >
             Sign out
           </Text>
+          </>
         ) : (
           <Link to="/signIn" style={styles.link}>
             <Text color="appBarText" fontSize="subheading">
