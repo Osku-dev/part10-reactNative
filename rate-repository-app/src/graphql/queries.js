@@ -32,10 +32,17 @@ export const GET_REPOSITORY = gql`
 `;
 
 export const GET_CURRENT_USER = gql`
-  query {
-    me {
-      id
+query getCurrentUser($includeReviews: Boolean = false) {
+  me {
+    id
       username
+    reviews @include(if: $includeReviews) {
+      ...ReviewDetails
+        }
+      }
     }
-  }
+  
+${REVIEW_DETAILS}
 `;
+
+

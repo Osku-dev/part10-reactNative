@@ -48,6 +48,11 @@ const AppBar = () => {
               Create a review
             </Text>
           </Link>
+          <Link to="/myReviews" style={styles.link}>
+            <Text color="appBarText" fontSize="heading">
+              My reviews
+            </Text>
+            </Link>
           <Text
             color="appBarText"
             fontSize="heading"

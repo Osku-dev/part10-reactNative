@@ -4,7 +4,6 @@ import useRepositories from "../hooks/useRepositories";
 import Text from "./Text";
 import { useNavigate } from "react-router-native";
 import { useState } from "react";
-import OrderPicker from "./OrderPicker";
 import RepositoryListHeader from "./RepositoryListHeader";
 import { useDebounce } from "use-debounce";
 import React from "react";

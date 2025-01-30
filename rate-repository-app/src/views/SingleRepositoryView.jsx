@@ -29,7 +29,7 @@ const RepositoryInfo = ({ repository }) => {
   );
 };
 
-const ReviewItem = ({ review }) => {
+export const ReviewItem = ({ review }) => {
   const formattedDate = format(new Date(review.createdAt), "dd.MM.yyyy");
 
   return (
