@@ -48,9 +48,9 @@ export const ReviewItem = ({ review }) => {
 
 const SingleRepositoryView = () => {
   const { id } = useParams();
-  const { data, loading, error } = useQuery(GET_REPOSITORY, {
+  const { data, loading, error, fetchMore } = useQuery(GET_REPOSITORY, {
     fetchPolicy: 'cache-and-network',
-    variables: { id },
+    variables: { id,  first: 8 },
   });
 
   if (loading) return <Text style={styles.text}>Loading...</Text>;
@@ -58,6 +58,20 @@ const SingleRepositoryView = () => {
 
   const repository = data.repository;
   const reviews = repository.reviews?.edges.map(edge => edge.node);
+  const { endCursor, hasNextPage } = data.repository.reviews.pageInfo;
+
+  const handleFetchMore = () => {
+    if (!hasNextPage) return;
+
+    fetchMore({
+      variables: {
+        id,
+        first: 8,
+        after: endCursor,
+      },
+    });
+  };
+
 
   return (
     <FlatList
@@ -65,6 +79,8 @@ const SingleRepositoryView = () => {
       renderItem={({ item }) => <ReviewItem review={item} />}
       keyExtractor={({ id }) => id}
       ListHeaderComponent={() => <RepositoryInfo repository={repository} />}
+      onEndReached={handleFetchMore} 
+      onEndReachedThreshold={0.5}
       
     />
   );

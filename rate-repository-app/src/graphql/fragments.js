@@ -17,21 +17,26 @@ export const REPOSITORY_DETAILS = gql`
 
 export const REVIEW_DETAILS = gql`
   fragment ReviewDetails on ReviewConnection {
+    totalCount
     edges {
+      cursor
       node {
         id
         text
         rating
         createdAt
-        repository {
-          id
-          fullName
-        }
+        repositoryId
         user {
           id
           username
         }
       }
     }
+    pageInfo {
+      endCursor
+      startCursor
+      hasNextPage
+    }
   }
 `;
+

@@ -40,7 +40,7 @@ export class RepositoryListContainer extends React.Component {
   };
 
   render() {
-    const { repositories, onPressItem } = this.props;
+    const { repositories, onPressItem, onEndReach } = this.props;
     const repositoryNodes = repositories
       ? repositories.edges.map((edge) => edge.node)
       : [];
@@ -54,6 +54,8 @@ export class RepositoryListContainer extends React.Component {
             <RepositoryItem {...item} />
           </Pressable>
         )}
+        onEndReached={onEndReach}
+        onEndReachedThreshold={0.5}
         ListHeaderComponent={this.renderHeader}
       />
     );
@@ -66,15 +68,20 @@ const RepositoryList = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [debouncedSearchKeyword] = useDebounce(searchKeyword, 1000);
 
-  const { repositories, loading } = useRepositories({
+  const { repositories, loading , fetchMore} = useRepositories({
     orderBy,
     orderDirection,
     searchKeyword: debouncedSearchKeyword,
+    first: 9
   });
   const navigate = useNavigate();
 
   const handlePressItem = (id) => {
     navigate(`/repository/${id}`);
+  };
+
+  const onEndReach = () => {
+    fetchMore();
   };
 
   if (loading) {
@@ -90,6 +97,7 @@ const RepositoryList = () => {
       setOrderBy={setOrderBy}
       orderDirection={orderDirection}
       setOrderDirection={setOrderDirection}
+      onEndReach={onEndReach}
     />
   );
 };
